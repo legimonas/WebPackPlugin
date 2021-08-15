@@ -13,10 +13,16 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <!-- Add your extensions here -->
+        <toolWindow
+                factoryClass="by.bsu.webpack.explorer.ui.ExplorerWindowFactory"
+                id="Web Pack"
+                anchor="right"/>
+
+        <applicationService serviceImplementation="by.bsu.webpack.explorer.ui.GlobalControllersExporerContent"/>
     </extensions>
 
     <actions>
         <!-- Add your actions here -->
     </actions>
+
 </idea-plugin>

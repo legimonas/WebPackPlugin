@@ -15,6 +15,19 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    maven {
+        url = uri("http://localhost:8587/repository/internal/")
+        isAllowInsecureProtocol = true
+        credentials {
+            username = "admin"
+            password = "password123"
+        }
+        metadataSources {
+            mavenPom()
+            artifact()
+            ignoreGradleMetadataRedirection()
+        }
+    }
 }
 
 java {
