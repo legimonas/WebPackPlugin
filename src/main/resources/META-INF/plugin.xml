@@ -18,7 +18,15 @@
                 id="Web Pack"
                 anchor="right"/>
 
-        <applicationService serviceImplementation="by.bsu.webpack.explorer.ui.GlobalControllersExporerContent"/>
+        <applicationService
+                serviceInterface="by.bsu.webpack.crudable.DataProvider"
+                serviceImplementation="by.bsu.webpack.crudable.DataProviderImpl"/>
+
+        <applicationService serviceImplementation="by.bsu.webpack.explorer.ui.GlobalExporerContent"/>
+
+        <applicationService
+                serviceInterface="by.bsu.webpack.explorer.ui.Explorer"
+                serviceImplementation="by.bsu.webpack.explorer.ui.GlobalExplorer"/>
     </extensions>
 
     <actions>
