@@ -9,7 +9,7 @@ import com.intellij.openapi.wm.ToolWindowFactory
 class ExplorerWindowFactory : ToolWindowFactory, DumbAware {
   override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
     val contentManager = toolWindow.contentManager
-    val explorerContent = service<GlobalControllersExporerContent>()
+    val explorerContent = service<GlobalExporerContent>()
     val content = contentManager.factory.createContent(
       explorerContent.buildComponent(toolWindow.disposable, project),
       explorerContent.displayName,
