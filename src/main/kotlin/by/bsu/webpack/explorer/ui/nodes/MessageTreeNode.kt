@@ -1,7 +1,7 @@
 package by.bsu.webpack.explorer.ui.nodes
 
-import by.bsu.webpack.data.MessageUnit
-import by.bsu.webpack.data.WebPackProject
+import by.bsu.webpack.explorer.units.MessageUnit
+import by.bsu.webpack.explorer.units.WebPackProject
 import by.bsu.webpack.explorer.ui.ExplorerTreeStructureBase
 import by.bsu.webpack.explorer.ui.ExplorerUnitTreeNodeBase
 import com.intellij.ide.projectView.PresentationData
@@ -13,10 +13,11 @@ class MessageTreeNode(
   value: MessageUnit,
   project: Project,
   parent: ExplorerTreeNode<*>,
-  webPackProject: WebPackProject,
+  unit: WebPackProject,
   treeStructure: ExplorerTreeStructureBase
-) : ExplorerUnitTreeNodeBase<MessageUnit, WebPackProject>(value, project, parent, webPackProject, treeStructure) {
+) : ExplorerUnitTreeNodeBase<MessageUnit, WebPackProject> (value, project, parent, unit, treeStructure) {
   override fun update(presentation: PresentationData) {
+    presentation.setIcon(value.icon)
     presentation.addText(value.name, SimpleTextAttributes.REGULAR_ATTRIBUTES)
   }
 

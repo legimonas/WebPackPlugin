@@ -1,6 +1,6 @@
 package by.bsu.webpack.explorer.ui
 
-import by.bsu.webpack.explorer.ExplorerUnit
+import by.bsu.webpack.explorer.units.ExplorerUnit
 import by.bsu.webpack.explorer.ui.nodes.ExplorerTreeNode
 import com.intellij.openapi.project.Project
 

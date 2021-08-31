@@ -1,6 +1,6 @@
-package by.bsu.webpack.data
+package by.bsu.webpack.explorer.units
 
-import by.bsu.webpack.explorer.ExplorerUnit
+import by.bsu.webpack.explorer.units.entities.EntityWithUuid
 
 interface FolderWithItems<T: EntityWithUuid>: ExplorerUnit {
   val items: Collection<T>

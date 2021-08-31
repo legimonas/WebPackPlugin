@@ -1,10 +1,11 @@
 package by.bsu.webpack.explorer.ui.nodes
 
-import by.bsu.webpack.data.FolderConfig
-import by.bsu.webpack.data.MessageUnit
-import by.bsu.webpack.data.WebPackProject
+import by.bsu.webpack.explorer.units.entities.FolderConfig
+import by.bsu.webpack.explorer.units.MessageUnit
+import by.bsu.webpack.explorer.units.WebPackProject
 import by.bsu.webpack.explorer.ui.ExplorerTreeStructureBase
 import by.bsu.webpack.explorer.ui.ExplorerUnitTreeNodeBase
+import by.bsu.webpack.explorer.units.entities.ControllersConfig
 import com.intellij.icons.AllIcons
 import com.intellij.ide.projectView.PresentationData
 import com.intellij.ide.util.treeView.AbstractTreeNode
@@ -28,15 +29,18 @@ class WebPackProjectNode(
     presentation.setIcon(wppIcon)
   }
 
+
   override fun getChildren(): MutableCollection<out AbstractTreeNode<*>> {
-    val controllersNode = FolderTreeNode(
-      FolderConfig<MessageUnit>("controllers", explorer, emptyList()),
-      { mu, f -> MessageTreeNode(mu, notNullProject, f, unit, treeStructure) },
+    val projectControllers = unit.controllers
+    val controllersNode = if (projectControllers != null ) FolderTreeNode(
+      projectControllers,
+      { controller, folder -> ControllerTreeNode(controller, notNullProject, folder, unit, treeStructure) },
       notNullProject,
       this,
       unit,
       treeStructure
-    )
-    return mutableListOf(controllersNode)
+    ) else null
+
+    return mutableListOf(controllersNode).filterNotNull().toMutableList()
   }
 }

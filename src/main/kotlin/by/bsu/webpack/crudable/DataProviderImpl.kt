@@ -1,8 +1,6 @@
 package by.bsu.webpack.crudable
 
-import by.bsu.webpack.data.ControllerConfig
-import by.bsu.webpack.data.EntityWithUuid
-import by.bsu.webpack.data.WebPackProjectConfig
+import by.bsu.webpack.explorer.units.entities.*
 import by.bsu.webpack.utils.castOrNull
 import by.bsu.webpack.utils.optional
 import java.util.*
@@ -13,12 +11,20 @@ class DataProviderImpl: DataProvider {
   val collections = mutableMapOf<Class<out EntityWithUuid>, MutableMap<String, EntityWithUuid>>()
 
   init {
-    WebPackProjectConfig("some-uuid-v4-1", "currentProject").also {
+    WebPackProjectConfig("currentProject").also {
       add(it)
-      add(ControllerConfig("Controller1", it))
+//      val entityClass = EntityClass(
+//        "User",
+//        EntityAnnotationInfo(),
+//        TableAnnotationInfo("users"),
+//        mutableListOf(FieldInfo(Int::class.java.name, "id"), FieldInfo(String::class.java.name, "name")) as List<MemberInfo>?
+//      )
+      val controller = ControllerConfig("My Super Save Controller",ControllerType.SAVE_CONTROLLER, "/save", HttpMethod.POST, it)
+      add(controller)
+      add(ControllersConfig(it))
     }
 
-    add(WebPackProjectConfig("some-uuid-v4-2", "otherProject"))
+    add(WebPackProjectConfig("otherProject"))
   }
 
   override fun collection(clazz: Class<out EntityWithUuid>): MutableMap<String, EntityWithUuid> {
@@ -27,13 +33,15 @@ class DataProviderImpl: DataProvider {
     return res
   }
 
-
-  override fun add(obj: EntityWithUuid): Optional<EntityWithUuid> {
+  override fun <E : EntityWithUuid> add(obj: E): Optional<E> {
     return obj.also { collection(obj.javaClass)[obj.uuid] = obj }.optional
   }
 
-  override fun update(obj: EntityWithUuid): Optional<EntityWithUuid> {
-    return obj.also { collection(obj.javaClass)[obj.uuid] = obj }.optional
+  override fun <E : EntityWithUuid> update(obj: E): Optional<E> {
+    if (findByUniqueKey(obj.javaClass, obj.uuid).isPresent){
+      return obj.also { collection(obj.javaClass)[obj.uuid] = obj }.optional
+    }
+    return Optional.empty()
   }
 
   override fun <E : EntityWithUuid> delete(uuid: String, classOfE: Class<E>): Optional<EntityWithUuid> {
@@ -48,5 +56,15 @@ class DataProviderImpl: DataProvider {
     return findAll(clazz).filter { predicate.test(it) }
   }
 
+  override fun <E : EntityWithUuid> findByUniqueKey(clazz: Class<E>, key: String): Optional<E> {
+    return collection(clazz)[key].castOrNull(clazz).optional
+  }
 
+  override fun <E : EntityWithUuid> findFirstOrCreate(entity: E, predicate: Predicate<E>): Optional<E> {
+    val resultSet = find(entity.javaClass, predicate)
+    if (resultSet.isEmpty()){
+      return add(entity)
+    }
+    return resultSet[0].optional
+  }
 }

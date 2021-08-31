@@ -1,6 +1,6 @@
 package by.bsu.webpack.explorer.ui.nodes
 
-import by.bsu.webpack.data.WebPackProject
+import by.bsu.webpack.explorer.units.WebPackProject
 import by.bsu.webpack.explorer.ui.Explorer
 import by.bsu.webpack.explorer.ui.ExplorerTreeStructureBase
 import com.intellij.ide.projectView.PresentationData

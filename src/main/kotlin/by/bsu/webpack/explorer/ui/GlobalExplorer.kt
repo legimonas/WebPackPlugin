@@ -1,13 +1,11 @@
 package by.bsu.webpack.explorer.ui
 
-import by.bsu.webpack.crudable.DataProviderImpl
 import by.bsu.webpack.crudable.dataProvider
 import by.bsu.webpack.crudable.find
 import by.bsu.webpack.crudable.findAll
-import by.bsu.webpack.data.GlobalWebPackProject
-import by.bsu.webpack.data.WebPackProject
-import by.bsu.webpack.data.WebPackProjectConfig
-import by.bsu.webpack.explorer.ExplorerUnit
+import by.bsu.webpack.explorer.units.GlobalWebPackProject
+import by.bsu.webpack.explorer.units.entities.WebPackProjectConfig
+import by.bsu.webpack.explorer.units.ExplorerUnit
 import by.bsu.webpack.utils.rwLocked
 import com.intellij.notification.NotificationBuilder
 import com.intellij.notification.NotificationType

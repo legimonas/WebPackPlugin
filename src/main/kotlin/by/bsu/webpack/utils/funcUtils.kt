@@ -1,6 +1,9 @@
 package by.bsu.webpack.utils
 
+import com.google.gson.Gson
 import java.util.*
+import kotlin.reflect.full.memberFunctions
+import kotlin.reflect.full.instanceParameter
 
 @Suppress("UNCHECKED_CAST")
 fun <T> Any?.castOrNull(clazz: Class<T>): T? =
@@ -16,3 +19,13 @@ inline fun <T> Boolean?.runIfTrue(block: () -> T): T? {
 
 val <E> E?.optional: Optional<E>
   inline get() = Optional.ofNullable(this)
+
+val gson by lazy { Gson() }
+
+inline fun <reified T : Any> T.clone() = clone(T::class.java)
+
+fun <T : Any> T.clone(clazz: Class<out T>): T {
+  return with(gson) {
+    fromJson(toJson(this@clone), clazz)
+  }
+}

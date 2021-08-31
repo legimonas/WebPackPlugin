@@ -1,46 +1,44 @@
-package by.bsu.webpack.data
+package by.bsu.webpack.explorer.units
 
-import by.bsu.webpack.explorer.ui.Explorer
+import by.bsu.webpack.crudable.dataProvider
+import by.bsu.webpack.explorer.units.entities.ControllerConfig
 import by.bsu.webpack.explorer.ui.GlobalExplorer
+import by.bsu.webpack.explorer.units.entities.ControllersConfig
+import by.bsu.webpack.explorer.units.entities.WebPackProjectConfig
+import by.bsu.webpack.utils.clone
+import by.bsu.webpack.utils.runIfTrue
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.util.Disposer
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
-class GlobalFolderWithItems<T: EntityWithUuid>(
+class GlobalWebPackProject(
   override val uuid: String,
   parentDisposable: Disposable,
-  override val explorer: GlobalExplorer,
+  globalExplorer: GlobalExplorer,
   private val webPackProjectConfigProvider: (String) -> WebPackProjectConfig?
-): FolderWithItems<T>, Disposable {
+): WebPackProject {
+
   private val lock = ReentrantLock()
 
   private val isDisposed = AtomicBoolean(false)
 
-  init {
-    Disposer.register(parentDisposable, this)
-  }
 
   private val webPackProjectConfig: WebPackProjectConfig?
     get() = lock.withLock {
       isDisposed.compareAndSet(false, false).runIfTrue { webPackProjectConfigProvider(uuid) }
     }
-  override val items: Collection<T>
-    get() = TODO("Not yet implemented")
 
-  override fun addItem(item: T) {
-    TODO("Not yet implemented")
-  }
-
-  override fun removeItem(item: T) {
-    TODO("Not yet implemented")
-  }
+  override val controllers: ControllersConfig?
+    get() = lock.withLock { webPackProjectConfig?.controllers }
 
   override val name: String
-    get() = TODO("Not yet implemented")
+    get() = webPackProjectConfig?.name ?: ""
+
+  override val explorer = globalExplorer
 
   override fun dispose() {
-    TODO("Not yet implemented")
+    isDisposed.set(true)
   }
 }

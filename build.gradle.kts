@@ -46,6 +46,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.30")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.30")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
+//    implementation("com.kvk.config:KvkConfig:0.6.4")
+//    implementation("javassist:javassist:3.8.0.GA")
+//    implementation("com.sun.codemodel:codemodel:2.6")
     testImplementation("junit", "junit", "4.12")
 }
 

@@ -1,10 +1,10 @@
-package by.bsu.webpack.data
+package by.bsu.webpack.explorer.units.entities
 
 import java.util.*
 
-open class EntityWithUuid(
+abstract class EntityWithUuid(
   var uuid: String = UUID.randomUUID().toString()
-): Cloneable {
+) {
   companion object {
     val EMPTY_ID: String = ""
   }
@@ -26,4 +26,5 @@ open class EntityWithUuid(
         "uuid='" + uuid + '\'' +
         '}'
   }
+
 }
