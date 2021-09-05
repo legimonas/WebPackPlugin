@@ -21,3 +21,8 @@ class ControllersConfig(projectConfig: WebPackProjectConfig) :
   FolderConfig<ControllerConfig>("controllers", projectConfig) {
   override val itemClass = ControllerConfig::class.java
 }
+
+class EntitiesConfig(projectConfig: WebPackProjectConfig) :
+    FolderConfig<EntityConfig>("entities", projectConfig) {
+  override val itemClass = EntityConfig::class.java
+}

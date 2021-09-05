@@ -4,6 +4,7 @@ import by.bsu.webpack.crudable.dataProvider
 import by.bsu.webpack.explorer.units.entities.ControllerConfig
 import by.bsu.webpack.explorer.ui.GlobalExplorer
 import by.bsu.webpack.explorer.units.entities.ControllersConfig
+import by.bsu.webpack.explorer.units.entities.EntitiesConfig
 import by.bsu.webpack.explorer.units.entities.WebPackProjectConfig
 import by.bsu.webpack.utils.clone
 import by.bsu.webpack.utils.runIfTrue
@@ -32,6 +33,9 @@ class GlobalWebPackProject(
 
   override val controllers: ControllersConfig?
     get() = lock.withLock { webPackProjectConfig?.controllers }
+
+  override val entities: EntitiesConfig?
+    get() = lock.withLock { webPackProjectConfig?.entities }
 
   override val name: String
     get() = webPackProjectConfig?.name ?: ""

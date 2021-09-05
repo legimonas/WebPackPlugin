@@ -15,10 +15,15 @@ class MessageTreeNode(
   parent: ExplorerTreeNode<*>,
   unit: WebPackProject,
   treeStructure: ExplorerTreeStructureBase
-) : ExplorerUnitTreeNodeBase<MessageUnit, WebPackProject> (value, project, parent, unit, treeStructure) {
+) : ExplorerUnitTreeNodeBase<MessageUnit, WebPackProject>(value, project, parent, unit, treeStructure) {
   override fun update(presentation: PresentationData) {
     presentation.setIcon(value.icon)
-    presentation.addText(value.name, SimpleTextAttributes.REGULAR_ATTRIBUTES)
+    if (value.subValue == null || value.subValue == "") {
+      presentation.addText(value.name, SimpleTextAttributes.REGULAR_ATTRIBUTES)
+    } else {
+      presentation.addText(value.name + " ", SimpleTextAttributes.REGULAR_ATTRIBUTES)
+      presentation.addText(value.subValue, SimpleTextAttributes.GRAYED_ATTRIBUTES)
+    }
   }
 
   override fun getChildren(): MutableCollection<out AbstractTreeNode<*>> {

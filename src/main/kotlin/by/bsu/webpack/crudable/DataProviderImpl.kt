@@ -2,9 +2,12 @@ package by.bsu.webpack.crudable
 
 import by.bsu.webpack.explorer.units.entities.*
 import by.bsu.webpack.utils.castOrNull
+import by.bsu.webpack.utils.list
 import by.bsu.webpack.utils.optional
+import com.kvk.config.javassist.*
 import java.util.*
 import java.util.function.Predicate
+import javax.persistence.Id
 
 class DataProviderImpl: DataProvider {
 
@@ -13,12 +16,17 @@ class DataProviderImpl: DataProvider {
   init {
     WebPackProjectConfig("currentProject").also {
       add(it)
-//      val entityClass = EntityClass(
-//        "User",
-//        EntityAnnotationInfo(),
-//        TableAnnotationInfo("users"),
-//        mutableListOf(FieldInfo(Int::class.java.name, "id"), FieldInfo(String::class.java.name, "name")) as List<MemberInfo>?
-//      )
+      val entityClass = EntityClass(
+        "org.example.User", EntityAnnotationInfo(), TableAnnotationInfo("users")
+      )
+      entityClass.membersInfo = mutableListOf(
+        FieldInfo(java.lang.Integer::class.java.name, "id", AnnotationInfo.of(Id::class.java).list()),
+        FieldInfo(String::class.java, "name", ColumnAnnotationInfo("name").list())
+      ) as List<MemberInfo>?
+
+      val entityConfig = EntityConfig(entityClass, it)
+      add(entityConfig)
+
       val controller = ControllerConfig("My Super Save Controller",ControllerType.SAVE_CONTROLLER, "/save", HttpMethod.POST, it)
       add(controller)
       add(ControllersConfig(it))

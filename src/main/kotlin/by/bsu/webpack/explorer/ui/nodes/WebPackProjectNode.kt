@@ -41,6 +41,16 @@ class WebPackProjectNode(
       treeStructure
     ) else null
 
-    return mutableListOf(controllersNode).filterNotNull().toMutableList()
+    val projectEntities = unit.entities
+    val entitiesNode = if (projectEntities != null) FolderTreeNode(
+      projectEntities,
+      { controller, folder -> EntityTreeNode(controller, notNullProject, folder, unit, treeStructure) },
+      notNullProject,
+      this,
+      unit,
+      treeStructure
+    ) else null
+
+    return mutableListOf(controllersNode, entitiesNode).filterNotNull().toMutableList()
   }
 }

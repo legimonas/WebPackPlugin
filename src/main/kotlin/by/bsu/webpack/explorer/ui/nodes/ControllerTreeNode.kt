@@ -27,23 +27,12 @@ class ControllerTreeNode(
   override fun update(presentation: PresentationData) {
     presentation.setIcon(controllerIcon)
     presentation.addText(value.name, SimpleTextAttributes.REGULAR_ATTRIBUTES)
+    presentation.addText(" ${value.controllerType} | ${value.httpMethod}: ${value.url}", SimpleTextAttributes.GRAYED_ATTRIBUTES)
   }
 
-  fun makeMessageTreeNode(value: String, icon: Icon? = null): MessageTreeNode {
-    return MessageTreeNode(
-      MessageUnit(value, icon, explorer, UUID.randomUUID().toString()),
-      notNullProject,
-      this,
-      unit,
-      treeStructure
-    )
-  }
+
 
   override fun getChildren(): MutableCollection<out AbstractTreeNode<*>> {
-    return mutableListOf(
-      makeMessageTreeNode(value.controllerType.toString()),
-      makeMessageTreeNode(value.httpMethod.toString().toUpperCase()),
-      makeMessageTreeNode(value.url)
-    )
+    return mutableListOf()
   }
 }

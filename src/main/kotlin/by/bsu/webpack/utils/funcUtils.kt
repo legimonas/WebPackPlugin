@@ -29,3 +29,7 @@ fun <T : Any> T.clone(clazz: Class<out T>): T {
     fromJson(toJson(this@clone), clazz)
   }
 }
+
+fun <T: Any> T.list(): List<T> {
+  return listOf(this)
+}
