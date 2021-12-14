@@ -10,6 +10,9 @@ class WebPackProjectConfig(
     dataProvider.findFirstOrCreate(ControllersConfig(this),{ it.webPackProjectConfig.uuid == uuid }).get()
   }
 
+//  val controllers: ControllersConfig
+//    get() = dataProvider.findFirstOrCreate(ControllersConfig(this),{ it.webPackProjectConfig.uuid == uuid }).get()
+
   val entities: EntitiesConfig by lazy {
     dataProvider.findFirstOrCreate(EntitiesConfig(this), { it.webPackProjectConfig.uuid == uuid }).get()
   }

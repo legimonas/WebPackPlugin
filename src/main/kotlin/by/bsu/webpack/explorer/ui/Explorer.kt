@@ -18,6 +18,8 @@ interface Explorer {
 
   val units: Collection<ExplorerUnit>
 
+  fun updateUnits ()
+
   fun disposeUnit(unit: ExplorerUnit)
 
   fun isUnitPresented(unit: ExplorerUnit): Boolean

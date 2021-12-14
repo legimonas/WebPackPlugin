@@ -4,36 +4,49 @@ import by.bsu.webpack.explorer.units.entities.*
 import by.bsu.webpack.utils.castOrNull
 import by.bsu.webpack.utils.list
 import by.bsu.webpack.utils.optional
+import by.bsu.webpack.utils.sendTopic
+import com.intellij.openapi.application.ApplicationManager
+import com.intellij.util.messages.Topic
 import com.kvk.config.javassist.*
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 import java.util.function.Predicate
 import javax.persistence.Id
 
+val DATA_CHANGED_TOPIC: Topic<DataChangedListener> = Topic.create("DataChanged", DataChangedListener::class.java)
+
+interface DataChangedListener {
+  fun onAdd (e: EntityWithUuid)
+  fun onUpdate (e: EntityWithUuid)
+  fun onDelete (e: EntityWithUuid)
+}
+
+
 class DataProviderImpl: DataProvider {
 
-  val collections = mutableMapOf<Class<out EntityWithUuid>, MutableMap<String, EntityWithUuid>>()
+  private val collections = ConcurrentHashMap(mutableMapOf<Class<out EntityWithUuid>, MutableMap<String, EntityWithUuid>>())
 
-  init {
-    WebPackProjectConfig("currentProject").also {
-      add(it)
-      val entityClass = EntityClass(
-        "org.example.User", EntityAnnotationInfo(), TableAnnotationInfo("users")
-      )
-      entityClass.membersInfo = mutableListOf(
-        FieldInfo(java.lang.Integer::class.java.name, "id", AnnotationInfo.of(Id::class.java).list()),
-        FieldInfo(String::class.java, "name", ColumnAnnotationInfo("name").list())
-      ) as List<MemberInfo>?
-
-      val entityConfig = EntityConfig(entityClass, it)
-      add(entityConfig)
-
-      val controller = ControllerConfig("My Super Save Controller",ControllerType.SAVE_CONTROLLER, "/save", HttpMethod.POST, it)
-      add(controller)
-      add(ControllersConfig(it))
-    }
-
-    add(WebPackProjectConfig("otherProject"))
-  }
+//  init {
+//    WebPackProjectConfig("currentProject").also {
+//      add(it)
+//      val entityClass = EntityClass(
+//        "org.example.User", EntityAnnotationInfo(), TableAnnotationInfo("users")
+//      )
+//      entityClass.membersInfo = mutableListOf(
+//        FieldInfo(java.lang.Integer::class.java.name, "id", AnnotationInfo.of(Id::class.java).list().toMutableList()),
+//        FieldInfo(String::class.java, "name", ColumnAnnotationInfo("name").list<AnnotationInfo>().toMutableList())
+//      ) as List<MemberInfo>?
+//
+//      val entityConfig = EntityConfig(entityClass, it)
+//      add(entityConfig)
+//
+//      val controller = ControllerConfig("My Super Save Controller",ControllerType.SAVE_CONTROLLER, "/save", HttpMethod.POST, it)
+//      add(controller)
+//      add(ControllersConfig(it))
+//    }
+//
+//    add(WebPackProjectConfig("otherProject"))
+//  }
 
   override fun collection(clazz: Class<out EntityWithUuid>): MutableMap<String, EntityWithUuid> {
     val res = collections[clazz] ?: mutableMapOf()
@@ -42,18 +55,26 @@ class DataProviderImpl: DataProvider {
   }
 
   override fun <E : EntityWithUuid> add(obj: E): Optional<E> {
-    return obj.also { collection(obj.javaClass)[obj.uuid] = obj }.optional
+    return obj.also {
+      collection(obj.javaClass)[obj.uuid] = obj
+      sendTopic(DATA_CHANGED_TOPIC).onAdd(obj)
+    }.optional
   }
 
   override fun <E : EntityWithUuid> update(obj: E): Optional<E> {
     if (findByUniqueKey(obj.javaClass, obj.uuid).isPresent){
-      return obj.also { collection(obj.javaClass)[obj.uuid] = obj }.optional
+      return obj.also {
+        collection(obj.javaClass)[obj.uuid] = obj
+        sendTopic(DATA_CHANGED_TOPIC).onUpdate(obj)
+      }.optional
     }
     return Optional.empty()
   }
 
   override fun <E : EntityWithUuid> delete(uuid: String, classOfE: Class<E>): Optional<EntityWithUuid> {
-    return collection(classOfE).remove(uuid).optional
+    return collection(classOfE).remove(uuid).optional.also {
+      sendTopic(DATA_CHANGED_TOPIC).onDelete(it.get())
+    }
   }
 
   override fun <E : EntityWithUuid> findAll(clazz: Class<E>): List<E> {

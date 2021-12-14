@@ -14,6 +14,8 @@ abstract class ExplorerTreeNode<Value: Any>(
   protected val treeStructure: ExplorerTreeStructureBase
 ) : AbstractTreeNode<Value>(project, value) {
 
+  abstract val nodeType: NodeType
+
   init {
     @Suppress("LeakingThis")
     treeStructure.registerNode(this)
@@ -32,3 +34,20 @@ abstract class ExplorerTreeNode<Value: Any>(
   val path: TreePath
     get() = TreePath(pathList.toTypedArray())
 }
+
+enum class NodeType(value: String) {
+  ROOT("ROOT"),
+  PROJECT("PROJECT"),
+  CONTROLLERS_FOLDER("CONTROLLER_FOLDER"),
+  ENTITIES_FOLDER("ENTITY_FOLDER"),
+  CONTROLLER("CONTROLLER"),
+  ENTITY("ENTITY"),
+  MEMBER("MEMBER"),
+  CLASSIFIER("CLASSIFIER"),
+  MESSAGE("MESSAGE")
+}
+
+data class NodeData(
+  val node: ExplorerTreeNode<*>,
+  val nodeType: NodeType
+)

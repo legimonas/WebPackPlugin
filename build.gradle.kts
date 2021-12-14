@@ -57,6 +57,7 @@ dependencies {
 intellij {
     version = "2020.3.2"
 }
+
 tasks.getByName<org.jetbrains.intellij.tasks.PatchPluginXmlTask>("patchPluginXml") {
     changeNotes("""
       Add change notes here.<br>

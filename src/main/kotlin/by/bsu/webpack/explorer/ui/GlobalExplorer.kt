@@ -34,8 +34,17 @@ class GlobalExplorer : Explorer {
     )
   }
 
+  fun fetchUnits (): MutableSet<GlobalWebPackProject> {
+    return dataProvider.findAll<WebPackProjectConfig>().map { it.toGlobalWPP(disposable) }.stream().collect(Collectors.toSet())
+  }
+
+  override fun updateUnits() {
+    units.clear()
+    units.addAll(fetchUnits())
+  }
+
   override val units: MutableSet<GlobalWebPackProject> by rwLocked(
-    value = dataProvider.findAll<WebPackProjectConfig>().map { it.toGlobalWPP(disposable) }.stream().collect(Collectors.toSet()),
+    value = fetchUnits(),
     lock = lock
   )
 

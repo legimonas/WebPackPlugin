@@ -1,11 +1,8 @@
 package by.bsu.webpack.explorer.ui.nodes
 
-import by.bsu.webpack.explorer.units.entities.FolderConfig
-import by.bsu.webpack.explorer.units.MessageUnit
 import by.bsu.webpack.explorer.units.WebPackProject
 import by.bsu.webpack.explorer.ui.ExplorerTreeStructureBase
 import by.bsu.webpack.explorer.ui.ExplorerUnitTreeNodeBase
-import by.bsu.webpack.explorer.units.entities.ControllersConfig
 import com.intellij.icons.AllIcons
 import com.intellij.ide.projectView.PresentationData
 import com.intellij.ide.util.treeView.AbstractTreeNode
@@ -38,7 +35,8 @@ class WebPackProjectNode(
       notNullProject,
       this,
       unit,
-      treeStructure
+      treeStructure,
+      NodeType.CONTROLLERS_FOLDER
     ) else null
 
     val projectEntities = unit.entities
@@ -48,9 +46,12 @@ class WebPackProjectNode(
       notNullProject,
       this,
       unit,
-      treeStructure
+      treeStructure,
+      NodeType.ENTITIES_FOLDER
     ) else null
 
     return mutableListOf(controllersNode, entitiesNode).filterNotNull().toMutableList()
   }
+
+  override val nodeType = NodeType.PROJECT
 }

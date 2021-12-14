@@ -29,4 +29,6 @@ class MessageTreeNode(
   override fun getChildren(): MutableCollection<out AbstractTreeNode<*>> {
     return mutableListOf()
   }
+
+  override val nodeType = NodeType.MESSAGE
 }

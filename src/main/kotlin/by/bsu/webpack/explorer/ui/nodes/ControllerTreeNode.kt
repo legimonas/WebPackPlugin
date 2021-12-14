@@ -35,4 +35,6 @@ class ControllerTreeNode(
   override fun getChildren(): MutableCollection<out AbstractTreeNode<*>> {
     return mutableListOf()
   }
+
+  override val nodeType = NodeType.CONTROLLER
 }

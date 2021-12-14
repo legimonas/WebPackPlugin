@@ -20,7 +20,8 @@ class FolderTreeNode<T: ProjectBelongsConfig>(
   project: Project,
   parent: ExplorerTreeNode<*>,
   webPackProject: WebPackProject,
-  treeStructure: ExplorerTreeStructureBase
+  treeStructure: ExplorerTreeStructureBase,
+  override val nodeType: NodeType
 ): ExplorerUnitTreeNodeBase<FolderConfig<T>, WebPackProject>(folderConfig, project, parent, webPackProject, treeStructure) {
 
   override fun update(presentation: PresentationData) {

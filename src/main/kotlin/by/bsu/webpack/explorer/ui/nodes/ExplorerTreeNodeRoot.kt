@@ -21,4 +21,6 @@ class ExplorerTreeNodeRoot(
     return explorer.units.filterIsInstance<WebPackProject>()
       .map{ WebPackProjectNode(it, notNullProject, this, treeStructure) }.toMutableList()
   }
+
+  override val nodeType = NodeType.ROOT
 }

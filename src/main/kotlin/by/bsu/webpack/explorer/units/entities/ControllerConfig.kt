@@ -13,7 +13,7 @@ class ControllerConfig(
 ): ProjectBelongsConfig(webPackProjectConfig)
 
 enum class ControllerType(private val v: String) {
-  SAVE_CONTROLLER("SaveController");
+  SAVE_CONTROLLER("SaveController"), CUSTOM("Custom");
 
   override fun toString(): String {
     return v
@@ -35,3 +35,7 @@ enum class HttpMethod(private val v: String) {
     return v
   }
 }
+
+val controllersWithEntities = listOf(
+  ControllerType.SAVE_CONTROLLER
+)

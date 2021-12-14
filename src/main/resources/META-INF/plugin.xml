@@ -27,10 +27,34 @@
         <applicationService
                 serviceInterface="by.bsu.webpack.explorer.ui.Explorer"
                 serviceImplementation="by.bsu.webpack.explorer.ui.GlobalExplorer"/>
+
+        <postStartupActivity implementation="by.bsu.webpack.explorer.FindConfigActivity"/>
     </extensions>
 
     <actions>
-        <!-- Add your actions here -->
+        
+        <action id="by.bsu.webpack.explorer.actions.NewControllerAction"
+                class="by.bsu.webpack.explorer.actions.NewControllerAction" text="Controller" popup="true"/>
+
+        <action id="by.bsu.webpack.explorer.actions.NewEntityAction"
+                class="by.bsu.webpack.explorer.actions.NewEntityAction" text="Entity" popup="true"/>
+
+        <action id="by.bsu.webpack.explorer.actions.NewMemberAction"
+                class="by.bsu.webpack.explorer.actions.NewMemberAction" text="Member" popup="true"/>
+
+        <action id="by.bsu.webpack.explorer.actions.NewClassifierAction"
+                class="by.bsu.webpack.explorer.actions.NewClassifierAction" text="Classifier" popup="true"/>
+
+        <group id="NewGlobalExplorerGroup" text="New" popup="true">
+            <reference id="by.bsu.webpack.explorer.actions.NewControllerAction"/>
+            <reference id="by.bsu.webpack.explorer.actions.NewEntityAction"/>
+            <reference id="by.bsu.webpack.explorer.actions.NewMemberAction"/>
+            <reference id="by.bsu.webpack.explorer.actions.NewClassifierAction"/>
+        </group>
+
+        <group id="GlobalExplorerTreePopupMenuGroup">
+            <reference id="NewGlobalExplorerGroup"/>
+        </group>
     </actions>
 
 </idea-plugin>

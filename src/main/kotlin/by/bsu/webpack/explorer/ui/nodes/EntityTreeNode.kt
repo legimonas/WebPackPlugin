@@ -9,7 +9,6 @@ import com.intellij.icons.AllIcons
 import com.intellij.ide.projectView.PresentationData
 import com.intellij.ide.util.treeView.AbstractTreeNode
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.util.IconLoader
 import com.intellij.ui.SimpleTextAttributes
 import icons.WebPackIcons
 import java.util.*
@@ -39,25 +38,18 @@ class EntityTreeNode(
 
   override fun update(presentation: PresentationData) {
     presentation.setIcon(entityIcon)
-    presentation.addText(value.entityClass.className.substringAfterLast(".") + " ", SimpleTextAttributes.REGULAR_ATTRIBUTES)
+    if (value.entityClass.className?.contains(".") == true)
+      presentation.addText(value.entityClass.className.substringAfterLast(".") + " ", SimpleTextAttributes.REGULAR_ATTRIBUTES)
+    else
+      presentation.addText(value.entityClass.className + " ", SimpleTextAttributes.REGULAR_ATTRIBUTES)
     presentation.addText(value.entityClass.tableAnnotationInfo.name, SimpleTextAttributes.GRAYED_ATTRIBUTES)
   }
 
   override fun getChildren(): MutableCollection<out AbstractTreeNode<*>> {
     return value.entityClass.membersInfo.map{ memb ->
-      val value = memb.name
-      val subValueBase = memb.type.simpleName
-      var resultSubValue = subValueBase
-      var icon: Icon? = null
-      memb.annotationsInfo.findLast { it.annotationName == "Column" }?.let {
-        resultSubValue = "$subValueBase (${it.parameters["name"] as String})"
-        icon = columnIcon
-      }
-      memb.annotationsInfo.findLast { it.annotationName == "Id" }?.let {
-        resultSubValue = "$subValueBase (id)"
-        icon = idIcon
-      }
-      makeMessageTreeNode(value, resultSubValue, icon)
+      MembersTreeNode(memb, notNullProject, this, unit, treeStructure)
     }.toMutableList()
   }
+
+  override val nodeType = NodeType.ENTITY
 }

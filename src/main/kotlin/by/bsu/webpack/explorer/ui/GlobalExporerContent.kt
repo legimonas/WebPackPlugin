@@ -12,6 +12,6 @@ class GlobalExporerContent : ExplorerContent(null, "Controllers Explorer") {
     return GlobalExplorerView(globalExplorer, project, parentDisposable)
   }
 
-  override val displayName = "Controllers"
+  override val displayName = "Web Explorer"
   override val isLockable = true
 }
